@@ -1,0 +1,73 @@
+
+-------------------------------------------------------------------
+0.9.0:
+-Initial version
+-------------------------------------------------------------------
+
+-------------------------------------------------------------------
+0.9.1:
+-Initial integration of basic web3-js based features, and required libraries
+-Changed license to same as js libraries for simplicity (MIT license)
+-------------------------------------------------------------------
+
+-------------------------------------------------------------------
+0.9.2:
+-Additional contract examples
+-Sending ETH to an address
+-Alerts / security informaion on proper secure RPC port setup
+-------------------------------------------------------------------
+
+-------------------------------------------------------------------
+0.9.3:
+-Finney / Szabo units for sending transactions
+-Syntax highlighting support for solc source code in editing text area
+-Ability to download dapp initiation javascript as a file, after contract creation
+-Ability to run javascript before compiling a contract, including web3.* variables
+-Password protection feature
+-Debugged source code modifications
+-Minor layout changes
+-------------------------------------------------------------------
+
+-------------------------------------------------------------------
+0.9.4:
+-Support for multiple nodes
+-Minor bug fixes
+-------------------------------------------------------------------
+
+-------------------------------------------------------------------
+0.9.5:
+-Moderate bug fixes / workarounds on limitations
+-------------------------------------------------------------------
+
+-------------------------------------------------------------------
+0.9.6:
+-Fairly minor GUI enhancements / tweaks
+-More documentation on system setup options
+-Mining Calculator
+-------------------------------------------------------------------
+
+-------------------------------------------------------------------
+0.9.7:
+-Node info updates every 10 seconds
+-Backup contract to your computer as a file
+-Very basic mobile compatibility
+-Small bug fixes
+-------------------------------------------------------------------
+
+-------------------------------------------------------------------
+0.9.8:
+-Detect if node is unresponsive, disable for session if so (to prevent application from hanging)
+-------------------------------------------------------------------
+
+-------------------------------------------------------------------
+0.9.9:
+-Fixed bug that manifested in v0.9.8, from base required files being moved to config file
+-------------------------------------------------------------------
+
+-------------------------------------------------------------------
+1.0.0:
+-Fixed additional bug that manifested in v0.9.8, from base required files being moved to config file
+-Minor tweaks
+-------------------------------------------------------------------
+
+

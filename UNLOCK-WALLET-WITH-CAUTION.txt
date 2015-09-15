@@ -1,0 +1,55 @@
+
+Many of the features in this script require you to unlock your wallet. DO THIS WITH EXTREME CAUTION. I recommend only unlocking an account with a very small balance, and IMMEADIATELY transferring and mined coins to another locked or cold wallet address.
+
+So now that you have been warned, here is how to unlock your wallet per session OR at system startup...
+
+
+UNLOCKING A WALLET PER SESSION...
+
+Run this from the geth console:
+personal.unlockAccount(eth.accounts[0], "yourpassword")
+
+
+UNLOCKING A WALLET AT STARTUP...
+
+Create a file to store your password in your home directory (NOT as root, as a normal user):
+
+cd ~/
+nano mypass.pass
+
+Enter your password in the new file, then exit with Crtl + X, and choose Y to save the file.
+
+RECCOMANDATION: You likely will want to make sure your home folder permissions are tight. 750 is a good chmod for a home folder to not be 'snoopable' by anyone other than root (system admin).
+
+Now create a new .sh file with nano somewhere in your home directory (NOT as root, as a normal user):
+
+cd ~/
+nano geth-startup.sh
+
+Enter this in nano:
+/usr/bin/geth --verbosity 1 --rpc --rpcapi "db,eth,net,web3" --rpcaddr "YOUR.INTERNAL.NETWORK.IP.ADDRESS.GOES.HERE" --rpcport "8545" --password /home/YOUR_USERNAME_GOES_HERE/mypass.pass --unlock YOUR_ETHERBASE_ADDRESS_GOES_HERE console
+
+Exit with Crtl + X, and choose Y to save the file.
+
+Make your file executable:
+chmod +x geth-startup.sh
+
+VERY IMPORTANT NOTE: The command --rpcaddr "YOUR.INTERNAL.NETWORK.IP.ADDRESS.GOES.HERE" allows remote operations such as mining remotely with ethminer on another machine to this instance of geth, AS WELL AS ENABLING REMOTE ABILITY TO TRANSFER BALANCES IF YOUR ACCOUNT IS UNLOCKED. USE THIS PARAMETER WITH EXTREME CAUTION! TO SKIP ENABLING REMOTE CONNECTION CAPABILITY DO NOT INCLUDE THIS COMMAND PARAMETER. ADDITIONALLY IT IS HIGHLY RECOMMENDED TO ONLY USE YOUR --INTERNAL NETWORK-- IP ADDRESSES AND ---NOT--- EVER HAVE YOUR RPC PORT EXPOSED TO THE INTERNET BY OPENING THE ROUTER PORT TO HAVE ACCESS TO IT. 
+
+MORE SECURITY ALERT INFORMATION CAN BE FOUND HERE:
+https://blog.ethereum.org/2015/08/29/security-alert-insecurely-configured-geth-can-make-funds-remotely-accessible/
+
+Now we can add the command to /etc/rc.local to run at system startup:
+
+sudo nano /etc/rc.local
+
+Add this above the exit command:
+
+su YOUR_USERNAME_GOES_HERE -c '/bin/sh /home/YOUR_USERNAME_GOES_HERE/geth-startup.sh'
+
+Make sure /etc/rc.local is set to be executable at startup:
+sudo chmod +x /etc/rc.local
+
+Reboot. Make sure you opened port 30303 on your router to this machine, so peers can connect to you and you can sync the blockchain. Thats all, you should now be able to run DFD Geth JSON and use all available features with no manual wallet unlocking ever needed.
+
+

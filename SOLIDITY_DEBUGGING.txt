@@ -1,0 +1,6 @@
+
+Debugging Solidity with more helpful error messages than this web interface can be done via a linux command line terminal like so:
+
+cd /path/to/sol/files
+
+solc your-dapp-source.sol (attempts to compile, AND SHOWS GOOD DEBUGGING ERROR REPORTS)

@@ -1,0 +1,20 @@
+
+-Add web3.eth.getStorageAt support:
+https://github.com/ethereum/wiki/wiki/JavaScript-API#web3ethgetstorageat
+
+-Add more dApp examples to build from
+
+-Examine web3-js JSON request data from all different data request types, and look into php-curl based eqivelent RPC port data requests alternatives to web3-js (php/curl only).
+
+-Rewrite node stats once on it's own page, so it shows ALL the nodes (listed in config file) basic stats.
+
+-Create 60 or 30 minute average hashrate feature
+
+-Once sending transactions is on it's own page, add ability to choose which account to send from
+
+- Create these category pages + corrisponding navigation menu items:
+Nodes
+Contracts
+Transactions
+Links
+Settings
