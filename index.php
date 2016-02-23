@@ -264,7 +264,15 @@ if ( $_POST['get_live_contract_code'] ) {
 </script>
 
 
-<p align='center'>Version <?=$version?> <br /><a href='http://www.dragonfrugal.com/download-bin/DFD_Geth_JSON_<?=$version?>.zip' target='_blank'>Download Source Code Here</a><br /><br />BTC Donations welcome: 1FfWHekHPLH7hQcU4d5MBVQ4WekJiA8Mk2</p>
+<p align='center'>
+	
+	<a href='https://github.com/taoteh1221/DFD_Geth_JSON/releases' target='_blank'>Version <?=$version?></a>
+	
+	<br /><br />Donations are welcome to support further development...
+	<br /><br />BTC: 1FfWHekHPLH7hQcU4d5MBVQ4WekJiA8Mk2
+	<br /><br />ETH: 0xf3da0858c3cfcc28a75c1232957a7fb190d7e5e9
+
+</p>
 
 </div> <!-- #wrapper -->
 
