@@ -7,7 +7,7 @@ So now that you have been warned, here is how to unlock your wallet per session 
 UNLOCKING A WALLET PER SESSION...
 
 Run this from the geth console:
-personal.unlockAccount(eth.accounts[0], "yourpassword")
+personal.unlockAccount(YOUR_ETHERBASE_ADDRESS_GOES_HERE)
 
 
 UNLOCKING A WALLET AT STARTUP...
@@ -27,7 +27,7 @@ cd ~/
 nano geth-startup.sh
 
 Enter this in nano:
-/usr/bin/geth --verbosity 1 --rpc --rpcapi "db,eth,net,web3" --rpcaddr "YOUR.INTERNAL.NETWORK.IP.ADDRESS.GOES.HERE" --rpcport "8545" --password /home/YOUR_USERNAME_GOES_HERE/mypass.pass --unlock YOUR_ETHERBASE_ADDRESS_GOES_HERE console
+/usr/bin/geth --verbosity 1 --rpc --rpcapi "db,eth,net,web3" --rpcaddr "YOUR.INTERNAL.NETWORK.IP.ADDRESS.GOES.HERE" --rpcport "8545" --etherbase "YOUR_MINING_ADDRESS_HERE" --password /home/YOUR_USERNAME_GOES_HERE/mypass.pass --unlock YOUR_ETHERBASE_ADDRESS_GOES_HERE console
 
 Exit with Crtl + X, and choose Y to save the file.
 

@@ -19,7 +19,7 @@ require("lib/commands.php");
 header('Content-Type: text/html; charset=utf-8');
 
 
-$version = '1.0.0';  // 2015/Sept/5th
+$version = '1.0.1';  // 2016/Feb/23rd
 
 
 // START OF CONFIGURATION

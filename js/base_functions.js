@@ -116,7 +116,7 @@ function node_stats() {
     window.node_html = window.node_html + "<p><b>Addresses:</b> <ul>";
     
         for(var account in accounts) {
-    window.node_html = window.node_html + "<li><a href='https://www.etherchain.org/account/" + accounts[account] + "' target='_blank'>" + accounts[account] + "</a> (account " + account + "): "+ web3.eth.getBalance(accounts[account]) / 1000000000000000000 +" ETH, "+web3.eth.getTransactionCount(accounts[account])+" sent transactions</li>";
+    window.node_html = window.node_html + "<li><a href='http://etherscan.io/address/" + accounts[account] + "' target='_blank'>" + accounts[account] + "</a> (account " + account + "): "+ web3.eth.getBalance(accounts[account]) / 1000000000000000000 +" ETH, "+web3.eth.getTransactionCount(accounts[account])+" sent transactions</li>";
         }
         
     window.node_html = window.node_html + "</ul></p>";
@@ -129,7 +129,7 @@ function node_stats() {
         
     window.node_html = window.node_html + "</ul></p>";
     
-    window.node_html = window.node_html + "<p><b>ETH Coinbase:</b> <a href='https://www.etherchain.org/account/" + coin_base + "' target='_blank'>"+coin_base+"</a></p>";
+    window.node_html = window.node_html + "<p><b>ETH Coinbase:</b> <a href='http://etherscan.io/address/" + coin_base + "' target='_blank'>"+coin_base+"</a></p>";
     
     window.node_html = window.node_html + "<p><b>Mining Difficulty:</b> "+number_format(difficulty)+"</p>";
     

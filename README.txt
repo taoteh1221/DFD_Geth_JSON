@@ -10,11 +10,11 @@ http://www.webmin.com/vinstall.html
 
 After installing geth / web server stack on your machine, add this to your /etc/rc.local file above the exit code, and make sure /etc/rc.local is executable, then reboot (OR skip this step, use the alernate method described in UNLOCK-WALLET-WITH-CAUTION.txt):
 
-su PUT_YOUR_USERNAME_HERE -c '/usr/bin/geth --rpc --rpcapi "db,eth,net,web3" --rpcaddr "PUT_YOUR_IP_ADDRESS_HERE" --rpcport "8545"'
+su PUT_YOUR_USERNAME_HERE -c '/usr/bin/geth --rpc --rpcapi "db,eth,net,web3" --rpcaddr "PUT_YOUR_IP_ADDRESS_HERE" --rpcport "8545" --etherbase "YOUR_MINING_ADDRESS_HERE"'
 
 OR just run this in a terminal:
 
-geth --rpc --rpcapi "db,eth,net,web3" --rpcaddr "PUT_YOUR_IP_ADDRESS_HERE" --rpcport "8545" console
+geth --rpc --rpcapi "db,eth,net,web3" --rpcaddr "PUT_YOUR_IP_ADDRESS_HERE" --rpcport "8545" --etherbase "YOUR_MINING_ADDRESS_HERE" console
 
 Notice I added 'console' to the end of this command line...this allows you to run commands in geth.
 
