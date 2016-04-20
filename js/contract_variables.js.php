@@ -21,10 +21,10 @@
     
     //console.log(contract_source_code);
     
-<?php
+
 // Only set compiler-related vars if compilers exist
-if ( trim($eth_compilers[0]) != ''  ) {
-?>
+if ( window.compilers.length > 0 ) {
+
                            
     // Solidity compiled source code array
     var solidity_compiled = web3.eth.compile.solidity(contract_source_code);
@@ -45,7 +45,7 @@ if ( trim($eth_compilers[0]) != ''  ) {
                         
                             }
     
-<?php
+
 }
-?>
+
 </script>

@@ -115,8 +115,8 @@ function node_stats() {
     
     window.node_html = window.node_html + "<p><b>Addresses:</b> <ul>";
     
-        for(var account in accounts) {
-    window.node_html = window.node_html + "<li><a href='http://etherscan.io/address/" + accounts[account] + "' target='_blank'>" + accounts[account] + "</a> (account " + account + "): "+ web3.eth.getBalance(accounts[account]) / 1000000000000000000 +" ETH, "+web3.eth.getTransactionCount(accounts[account])+" sent transactions</li>";
+        for(var account in window.accounts) {
+    window.node_html = window.node_html + "<li><a href='http://etherscan.io/address/" + accounts[account] + "' target='_blank'>" + accounts[account] + "</a> (Local Account " + account + "): "+ web3.eth.getBalance(accounts[account]) / 1000000000000000000 +" ETH, "+web3.eth.getTransactionCount(accounts[account])+" sent transactions</li>";
         }
         
     window.node_html = window.node_html + "</ul></p>";
@@ -316,13 +316,13 @@ function call_contract() {
 
 /////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////
-function send_eth(address, eth_amount, eth_unit) {
+function send_eth(from_address, to_address, eth_amount, eth_unit) {
     
 var inwei = web3.toWei(eth_amount, eth_unit);
     
-    web3.eth.sendTransaction({from: web3.eth.accounts[0], to: address, value: inwei}, function(err, transaction_id) {
+    web3.eth.sendTransaction({from: web3.eth.accounts[from_address], to: to_address, value: inwei}, function(err, transaction_id) {
     if (!err)
-    document.getElementById('status').innerHTML = 'Address ' + address + ' was sent ' + eth_amount + ' '+eth_unit+', ' + "\n Transaction ID: " + transaction_id;
+    document.getElementById('status').innerHTML = 'Address ' + to_address + ' was sent ' + eth_amount + ' '+eth_unit+' from account '+from_address+', ' + "\n Transaction ID: " + transaction_id;
     });
     
 

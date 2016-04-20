@@ -14,7 +14,8 @@ require("../config.php");
 <script type="text/javascript" src="../js/web3/dist/web3.js"></script>
 <script type="text/javascript">
 
-    var web3 = require('web3');
+    var Web3 = require('web3');
+    var web3 = new Web3();
     web3.setProvider(new web3.providers.HttpProvider(proxy_url));
 
     // solidity code code

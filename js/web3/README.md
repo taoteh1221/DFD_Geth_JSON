@@ -1,3 +1,15 @@
+# Migration 0.13.0 -> 0.14.0
+
+web3.js version 0.14.0 supports [multiple instances of web3](https://github.com/ethereum/web3.js/issues/297) object.
+To migrate to this version, please follow the guide:
+
+```diff
+-var web3 = require('web3');
++var Web3 = require('web3');
++var web3 = new Web3();
+```
+
+
 # Ethereum JavaScript API
 
 [![Join the chat at https://gitter.im/ethereum/web3.js](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ethereum/web3.js?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -9,7 +21,7 @@ which implements the [Generic JSON RPC](https://github.com/ethereum/wiki/wiki/JS
 
 <!-- [![browser support](https://ci.testling.com/ethereum/ethereum.js.png)](https://ci.testling.com/ethereum/ethereum.js) -->
 
-You need to run a local ethrereum node to use this library.
+You need to run a local Ethereum node to use this library.
 
 [Documentation](https://github.com/ethereum/wiki/wiki/JavaScript-API)
 
@@ -52,7 +64,7 @@ console.log(web3); // {eth: .., shh: ...} // it's here!
 Set a provider (HttpProvider)
 
 ```js
-web3.setProvider(new web3.providers.HttpProvider('http://192.168.1.140:8545'));
+web3.setProvider(new web3.providers.HttpProvider('http://localhost:8545'));
 ```
 
 There you go, now you can use it:

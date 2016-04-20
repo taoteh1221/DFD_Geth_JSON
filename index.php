@@ -139,13 +139,23 @@ node_stats();
 }, 10 * 1000); // 10 * 1000 milsec is 10 seconds
 
     
-    document.write("<p><div align='right' style='width: 600px'><form name='send_form' action='' method='post'><b>Send: <input class='send_eth' type='text' name='eth_send' value='' style='width: 445px;' /> <select name='eth_unit'><option value='ether'> Ether </option><option value='finney'> Finney </option><option value='szabo'> Szabo </option></select> <br />To Address:</b> <input class='send_eth' type='text' size='50' name='eth_to_address' value='' style='width: 350px;' /> <input type='button' value='Send Transaction' onclick='var ok_proceed = confirm(document.send_form.eth_send.value + \" \" +document.send_form.eth_unit.value+ \" will be sent to Address \" +document.send_form.eth_to_address.value+ \", Proceed?\"); if ( ok_proceed == true ) { send_eth(document.send_form.eth_to_address.value, document.send_form.eth_send.value, document.send_form.eth_unit.value); document.send_form.eth_to_address.value = \"\"; document.send_form.eth_send.value = \"\"; return false; } else {}' /></form></div></p>");
+    document.write("<p><div align='left' style='width: 600px'><form name='send_form' action='' method='post'><b>Send: <input class='send_eth' type='text' name='eth_send' value='' style='width: 445px;' /> <select name='eth_unit'><option value='ether'> Ether </option><option value='finney'> Finney </option><option value='szabo'> Szabo </option></select> <br />To Receiving Address:</b> <input class='send_eth' type='text' style='width: 400px;' name='eth_to_address' value='' style='width: 350px;' /> <br /><b>From:</b> <select name='eth_from_address'>");
+    
+    
+        for(var account in window.accounts) {
+    window.node_html = window.node_html + "<li><a href='http://etherscan.io/address/" + accounts[account] + "' target='_blank'>" + accounts[account] + "</a> (account " + account + "): "+ web3.eth.getBalance(accounts[account]) / 1000000000000000000 +" ETH, "+web3.eth.getTransactionCount(accounts[account])+" sent transactions</li>";
+    
+        document.write("<option value='" + account + "'> Local Account " + account + " </option>");
+    
+        }
+    
+    document.write("</select> <input type='button' value='Send Transaction' onclick='var ok_proceed = confirm(document.send_form.eth_send.value + \" \" +document.send_form.eth_unit.value+ \" will be sent to Address \" +document.send_form.eth_to_address.value+ \", Proceed?\"); if ( ok_proceed == true ) { send_eth(document.send_form.eth_from_address.value, document.send_form.eth_to_address.value, document.send_form.eth_send.value, document.send_form.eth_unit.value); document.send_form.eth_to_address.value = \"\"; document.send_form.eth_send.value = \"\"; return false; } else {}' /></form></div></p>");
 
 </script>
 
 <div style='height: 20px;'></div>
 
-<?=( trim($eth_compilers[0]) != '' ? '' : '<p style="font-weight: bold; color: red;">You have no compilers installed.</p>' )?>
+<?=( $is_curl == 1 ? '' : '<p style="font-weight: bold; color: red;">You have no PHP curl module loaded.</p>' )?>
 
 <p>
     
@@ -217,21 +227,25 @@ foreach($files as $file) {
 
 <script type='text/javascript'>
 
-<?php
+
 // Only display if compilers exist
-if ( trim($eth_compilers[0]) != ''  ) {
-?>
+if ( window.compilers.length > 0  ) {
+
     
     if ( solidity_compiled ) {
         
+    /*
     document.write("<p><b>Compiled Code Array ("+
 solidity_compiled[get_key(solidity_compiled)]['info']['language'] + ' version ' + solidity_compiled[get_key(solidity_compiled)]['info']['compilerVersion']+
 "):</b> </p>");
     document.write("<textarea cols='120' rows='30' style='width: <?=$textarea_widths?>;'>" + JSON.stringify(solidity_compiled, null, 4) + "</textarea>");
 
     document.write("<div style='height: 20px;'></div>");
+    */
     
-    document.write("<p><b>Compiled Bytecode:</b> </p>");
+    document.write("<p><b>Compiled Bytecode ("+
+solidity_compiled[get_key(solidity_compiled)]['info']['language'] + ' version ' + solidity_compiled[get_key(solidity_compiled)]['info']['compilerVersion']+
+"):</b> </p>");
     document.write("<textarea cols='120' rows='30' style='width: <?=$textarea_widths?>;'>" + compiled_array_bytecode + "</textarea>");
 
     document.write("<div style='height: 20px;'></div>");
@@ -248,9 +262,12 @@ solidity_compiled[get_key(solidity_compiled)]['info']['language'] + ' version ' 
     document.write("<p><b style='color: red;'>Could not compile, check your source code...also look for any comments in the source code related to steps required before compiling.  Debugging via command line with 'solc /path/to/your-source-file.sol' will give verbose error outputs that can help determine the cause.</b></p>");
     }
     
-<?php
+
 }
-?>
+else {
+document.write('<p style="font-weight: bold; color: red;">You have no compilers installed.</p>');
+}
+
 
 
 
@@ -384,7 +401,6 @@ document.solidity_code.submit();
 
 </script>
 
-<?php include("noscript.php");  // Basic data for browsers without javascript enabled ?>
 
 </body>
 </html>

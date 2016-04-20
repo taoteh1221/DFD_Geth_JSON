@@ -46,7 +46,7 @@ var BigNumber = require('bignumber.js');
 To load with AMD loader libraries such as [requireJS](http://requirejs.org/):
 
 ```javascript
-require(['path/to/bignumber'], function(BigNumber) {  
+require(['path/to/bignumber'], function(BigNumber) {
     // Use BigNumber here in local scope. No global BigNumber.
 });
 ```
@@ -76,10 +76,10 @@ y = new BigNumber('zz.9', 36)       // "1295.25"
 z = x.plus(y)                       // "1306.25"
 ```
 
-A BigNumber is immutable in the sense that it is not changed by its methods.  
+A BigNumber is immutable in the sense that it is not changed by its methods.
 
 ```javascript
-0.3 - 0.1                           // 0.19999999999999998  
+0.3 - 0.1                           // 0.19999999999999998
 x = new BigNumber(0.3)
 x.minus(0.1)                        // "0.2"
 x                                   // "0.3"
@@ -202,9 +202,9 @@ To test a single method, e.g.
 
     $ node test/toFraction
 
-For the browser, see *every-test.html* and *single-test.html* in the *test/browser* directory.  
+For the browser, see *every-test.html* and *single-test.html* in the *test/browser* directory.
 
-*bignumber-vs-number.html* enables some of the methods of bignumber.js to be compared with those of JavaScript's number type.  
+*bignumber-vs-number.html* enables some of the methods of bignumber.js to be compared with those of JavaScript's number type.
 
 ## Versions
 
@@ -226,11 +226,11 @@ then
 
 will create *bignumber.min.js*.
 
-A source map will also be created in the *doc* directory.
+A source map will also be created in the root directory.
 
 ## Feedback
 
-Open an issue, or email  
+Open an issue, or email
 
 Michael
 
@@ -243,6 +243,38 @@ MIT.
 See [LICENCE](https://github.com/MikeMcl/bignumber.js/blob/master/LICENCE).
 
 ## Change Log
+
+####2.3.0
+* 07/03/2016
+* #86 Add modulus parameter to `toPower`.
+
+####2.2.0
+* 03/03/2016
+* #91 Permit larger JS integers.
+
+####2.1.4
+* 15/12/2015
+* Correct UMD.
+
+####2.1.3
+* 13/12/2015
+* Refactor re global object and crypto availability when bundling.
+
+####2.1.2
+* 10/12/2015
+* Bugfix: `window.crypto` not assigned to `crypto`.
+
+####2.1.1
+* 09/12/2015
+* Prevent code bundler from adding `crypto` shim.
+
+####2.1.0
+* 26/10/2015
+* For `valueOf` and `toJSON`, include the minus sign with negative zero.
+
+####2.0.8
+* 2/10/2015
+* Internal round function bugfix.
 
 ####2.0.6
 * 31/03/2015
@@ -316,7 +348,7 @@ See [LICENCE](https://github.com/MikeMcl/bignumber.js/blob/master/LICENCE).
 
 ####1.1.0
 * 1/8/2013
-* Allow numbers with trailing radix point.  
+* Allow numbers with trailing radix point.
 
 ####1.0.1
 * Bugfix: error messages with incorrect method name

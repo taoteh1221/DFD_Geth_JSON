@@ -2,8 +2,10 @@
 
 <script type="text/javascript">
                             
-    window.web3 = require('web3');
-    web3.setProvider(new web3.providers.HttpProvider());
+    
+    window.Web3 = require('web3');
+    window.web3 = new Web3();
+    web3.setProvider(new web3.providers.HttpProvider(proxy_url));
     
     var $_POST = <?php echo json_encode($_POST); ?>;
 
@@ -12,7 +14,7 @@
     //var balance = web3.eth.getBalance("ADDRESS-HERE");
     //var transactions = web3.eth.getTransactionCount("ADDRESS-HERE");
     window.coin_base = web3.eth.coinbase;
-    window.client_version = web3.version.client;
+    window.client_version = web3.version.node;
     window.compilers = web3.eth.getCompilers();
     
     

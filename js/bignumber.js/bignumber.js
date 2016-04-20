@@ -1,18 +1,18 @@
-/*! bignumber.js v2.0.7 https://github.com/MikeMcl/bignumber.js/LICENCE */
+/*! bignumber.js v2.3.0 https://github.com/MikeMcl/bignumber.js/LICENCE */
 
-;(function (global) {
+;(function (globalObj) {
     'use strict';
 
     /*
-      bignumber.js v2.0.7
+      bignumber.js v2.3.0
       A JavaScript library for arbitrary-precision arithmetic.
       https://github.com/MikeMcl/bignumber.js
-      Copyright (c) 2015 Michael Mclaughlin <M8ch88l@gmail.com>
+      Copyright (c) 2016 Michael Mclaughlin <M8ch88l@gmail.com>
       MIT Expat Licence
     */
 
 
-    var BigNumber, crypto, parseNumeric,
+    var cryptoObj, parseNumeric,
         isNumeric = /^-?(\d+(\.\d*)?|\.\d+)(e[+-]?\d+)?$/i,
         mathceil = Math.ceil,
         mathfloor = Math.floor,
@@ -34,11 +34,13 @@
          */
         MAX = 1E9;                                   // 0 to MAX_INT32
 
+    if ( typeof crypto != 'undefined' ) cryptoObj = crypto;
+
 
     /*
      * Create and return a BigNumber constructor.
      */
-    function another(configObj) {
+    function constructorFactory(configObj) {
         var div,
 
             // id tracks the caller function, so its name can be included in error messages.
@@ -258,7 +260,9 @@
 
                 // Disallow numbers with over 15 significant digits if number type.
                 // 'new BigNumber() number type has more than 15 significant digits: {n}'
-                if ( num && ERRORS && len > 15 ) raise( id, tooManyDigits, x.s * n );
+                if ( num && ERRORS && len > 15 && ( n > MAX_SAFE_INTEGER || n !== mathfloor(n) ) ) {
+                    raise( id, tooManyDigits, x.s * n );
+                }
 
                 e = e - i - 1;
 
@@ -313,7 +317,7 @@
         // CONSTRUCTOR PROPERTIES
 
 
-        BigNumber.another = another;
+        BigNumber.another = constructorFactory;
 
         BigNumber.ROUND_UP = 0;
         BigNumber.ROUND_DOWN = 1;
@@ -441,8 +445,8 @@
             if ( has( p = 'CRYPTO' ) ) {
 
                 if ( v === !!v || v === 1 || v === 0 ) {
-                    CRYPTO = !!( v && crypto && typeof crypto == 'object' );
-                    if ( v && !CRYPTO && ERRORS ) raise( 2, 'crypto unavailable', crypto );
+                    CRYPTO = !!( v && cryptoObj );
+                    if ( v && !CRYPTO && ERRORS ) raise( 2, 'crypto unavailable', cryptoObj );
                 } else if (ERRORS) {
                     raise( 2, p + notBool, v );
                 }
@@ -532,9 +536,9 @@
                 if (CRYPTO) {
 
                     // Browsers supporting crypto.getRandomValues.
-                    if ( crypto && crypto.getRandomValues ) {
+                    if ( cryptoObj && cryptoObj.getRandomValues ) {
 
-                        a = crypto.getRandomValues( new Uint32Array( k *= 2 ) );
+                        a = cryptoObj.getRandomValues( new Uint32Array( k *= 2 ) );
 
                         for ( ; i < k; ) {
 
@@ -551,7 +555,7 @@
                             // Probability that v >= 9e15, is
                             // 7199254740992 / 9007199254740992 ~= 0.0008, i.e. 1 in 1251
                             if ( v >= 9e15 ) {
-                                b = crypto.getRandomValues( new Uint32Array(2) );
+                                b = cryptoObj.getRandomValues( new Uint32Array(2) );
                                 a[i] = b[0];
                                 a[i + 1] = b[1];
                             } else {
@@ -565,10 +569,10 @@
                         i = k / 2;
 
                     // Node.js supporting crypto.randomBytes.
-                    } else if ( crypto && crypto.randomBytes ) {
+                    } else if ( cryptoObj && cryptoObj.randomBytes ) {
 
                         // buffer
-                        a = crypto.randomBytes( k *= 7 );
+                        a = cryptoObj.randomBytes( k *= 7 );
 
                         for ( ; i < k; ) {
 
@@ -581,7 +585,7 @@
                                   ( a[i + 4] << 16 ) + ( a[i + 5] << 8 ) + a[i + 6];
 
                             if ( v >= 9e15 ) {
-                                crypto.randomBytes(7).copy( a, i );
+                                cryptoObj.randomBytes(7).copy( a, i );
                             } else {
 
                                 // 0 <= (v % 1e14) <= 99999999999999
@@ -591,7 +595,7 @@
                         }
                         i = k / 7;
                     } else if (ERRORS) {
-                        raise( 14, 'crypto unavailable', crypto );
+                        raise( 14, 'crypto unavailable', cryptoObj );
                     }
                 }
 
@@ -1300,7 +1304,7 @@
                             sd -= x.e + 1;
 
                             // 1, 0.1, 0.01, 0.001, 0.0001 etc.
-                            xc[0] = pows10[ sd % LOG_BASE ];
+                            xc[0] = pows10[ ( LOG_BASE - sd % LOG_BASE ) % LOG_BASE ];
                             x.e = -sd || 0;
                         } else {
 
@@ -2353,59 +2357,91 @@
          * Return the value of this BigNumber converted to a number primitive.
          */
         P.toNumber = function () {
-            var x = this;
-
-            // Ensure zero has correct sign.
-            return +x || ( x.s ? x.s * 0 : NaN );
+            return +this;
         };
 
 
         /*
          * Return a BigNumber whose value is the value of this BigNumber raised to the power n.
+         * If m is present, return the result modulo m.
          * If n is negative round according to DECIMAL_PLACES and ROUNDING_MODE.
-         * If POW_PRECISION is not 0, round to POW_PRECISION using ROUNDING_MODE.
+         * If POW_PRECISION is non-zero and m is not present, round to POW_PRECISION using
+         * ROUNDING_MODE.
          *
-         * n {number} Integer, -9007199254740992 to 9007199254740992 inclusive.
-         * (Performs 54 loop iterations for n of 9007199254740992.)
+         * The modular power operation works efficiently when x, n, and m are positive integers,
+         * otherwise it is equivalent to calculating x.toPower(n).modulo(m) (with POW_PRECISION 0).
+         *
+         * n {number} Integer, -MAX_SAFE_INTEGER to MAX_SAFE_INTEGER inclusive.
+         * [m] {number|string|BigNumber} The modulus.
          *
          * 'pow() exponent not an integer: {n}'
          * 'pow() exponent out of range: {n}'
+         *
+         * Performs 54 loop iterations for n of 9007199254740991.
          */
-        P.toPower = P.pow = function (n) {
-            var k, y,
+        P.toPower = P.pow = function ( n, m ) {
+            var k, y, z,
                 i = mathfloor( n < 0 ? -n : +n ),
                 x = this;
+
+            if ( m != null ) {
+                id = 23;
+                m = new BigNumber(m);
+            }
 
             // Pass ±Infinity to Math.pow if exponent is out of range.
             if ( !isValidInt( n, -MAX_SAFE_INTEGER, MAX_SAFE_INTEGER, 23, 'exponent' ) &&
               ( !isFinite(n) || i > MAX_SAFE_INTEGER && ( n /= 0 ) ||
-                parseFloat(n) != n && !( n = NaN ) ) ) {
-                return new BigNumber( Math.pow( +x, n ) );
+                parseFloat(n) != n && !( n = NaN ) ) || n == 0 ) {
+                k = Math.pow( +x, n );
+                return new BigNumber( m ? k % m : k );
             }
 
-            // Truncating each coefficient array to a length of k after each multiplication equates
-            // to truncating significant digits to POW_PRECISION + [28, 41], i.e. there will be a
-            // minimum of 28 guard digits retained. (Using + 1.5 would give [9, 21] guard digits.)
-            k = POW_PRECISION ? mathceil( POW_PRECISION / LOG_BASE + 2 ) : 0;
+            if (m) {
+                if ( n > 1 && x.gt(ONE) && x.isInt() && m.gt(ONE) && m.isInt() ) {
+                    x = x.mod(m);
+                } else {
+                    z = m;
+
+                    // Nullify m so only a single mod operation is performed at the end.
+                    m = null;
+                }
+            } else if (POW_PRECISION) {
+
+                // Truncating each coefficient array to a length of k after each multiplication
+                // equates to truncating significant digits to POW_PRECISION + [28, 41],
+                // i.e. there will be a minimum of 28 guard digits retained.
+                // (Using + 1.5 would give [9, 21] guard digits.)
+                k = mathceil( POW_PRECISION / LOG_BASE + 2 );
+            }
+
             y = new BigNumber(ONE);
 
             for ( ; ; ) {
-
                 if ( i % 2 ) {
                     y = y.times(x);
                     if ( !y.c ) break;
-                    if ( k && y.c.length > k ) y.c.length = k;
+                    if (k) {
+                        if ( y.c.length > k ) y.c.length = k;
+                    } else if (m) {
+                        y = y.mod(m);
+                    }
                 }
 
                 i = mathfloor( i / 2 );
                 if ( !i ) break;
-
                 x = x.times(x);
-                if ( k && x.c && x.c.length > k ) x.c.length = k;
+                if (k) {
+                    if ( x.c && x.c.length > k ) x.c.length = k;
+                } else if (m) {
+                    x = x.mod(m);
+                }
             }
 
+            if (m) return y;
             if ( n < 0 ) y = ONE.div(y);
-            return k ? round( y, POW_PRECISION, ROUNDING_MODE ) : y;
+
+            return z ? y.mod(z) : k ? round( y, POW_PRECISION, ROUNDING_MODE ) : y;
         };
 
 
@@ -2485,10 +2521,23 @@
 
 
         /*
-         * Return as toString, but do not accept a base argument.
+         * Return as toString, but do not accept a base argument, and include the minus sign for
+         * negative zero.
          */
         P.valueOf = P.toJSON = function () {
-            return this.toString();
+            var str,
+                n = this,
+                e = n.e;
+
+            if ( e === null ) return n.toString();
+
+            str = coeffToString( n.c );
+
+            str = e <= TO_EXP_NEG || e >= TO_EXP_POS
+                ? toExponential( str, e )
+                : toFixedPoint( str, e );
+
+            return n.s < 0 ? '-' + str : str;
         };
 
 
@@ -2665,19 +2714,20 @@
     // EXPORT
 
 
-    BigNumber = another();
-
-    // AMD.
+   // AMD.
     if ( typeof define == 'function' && define.amd ) {
-        define( function () { return BigNumber; } );
+        define( function () { return constructorFactory(); } );
 
-    // Node and other environments that support module.exports.
+    // Node.js and other environments that support module.exports.
     } else if ( typeof module != 'undefined' && module.exports ) {
-        module.exports = BigNumber;
-        if ( !crypto ) try { crypto = require('crypto'); } catch (e) {}
+        module.exports = constructorFactory();
+
+        // Split string stops browserify adding crypto shim.
+        if ( !cryptoObj ) try { cryptoObj = require('cry' + 'pto'); } catch (e) {}
 
     // Browser.
     } else {
-        global.BigNumber = BigNumber;
+        if ( !globalObj ) globalObj = typeof self != 'undefined' ? self : Function('return this')();
+        globalObj.BigNumber = constructorFactory();
     }
 })(this);

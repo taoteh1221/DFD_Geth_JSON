@@ -12,14 +12,10 @@ $_SESSION['json_server_array'] = FALSE;
 }
 
 
-require("lib/functions.php");
-require("lib/commands.php");
-
-
 header('Content-Type: text/html; charset=utf-8');
 
 
-$version = '1.0.2';  // 2016/Feb/23rd
+$version = '1.0.3';  // 2016/April/19th
 
 
 // START OF CONFIGURATION
@@ -113,6 +109,8 @@ $textarea_widths = '600px';
 }
 
 // Needs to be at end of config file, or variables don't load
+require("lib/functions.php");
+require("lib/commands.php");
 require("lib/variables.php");
 
 

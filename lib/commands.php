@@ -13,7 +13,7 @@ $general_commands = array (
                                             "jsonrpc" => "2.0",
                                             "method" => "web3_clientVersion",
                                             "params" => "",
-                                            "id" => "2"
+                                            "id" => "67"
                                           ),
                         
                         'net_peerCount' => array(
