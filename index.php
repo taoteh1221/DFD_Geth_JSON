@@ -149,7 +149,7 @@ node_stats();
     
         }
     
-    document.write("</select> <input type='button' value='Send Transaction' onclick='var ok_proceed = confirm(document.send_form.eth_send.value + \" \" +document.send_form.eth_unit.value+ \" will be sent to Address \" +document.send_form.eth_to_address.value+ \", Proceed?\"); if ( ok_proceed == true ) { send_eth(document.send_form.eth_from_address.value, document.send_form.eth_to_address.value, document.send_form.eth_send.value, document.send_form.eth_unit.value); document.send_form.eth_to_address.value = \"\"; document.send_form.eth_send.value = \"\"; return false; } else {}' /></form></div></p>");
+    document.write("</select> <input type='button' value='Send Transaction' onclick='var ok_proceed = confirm(document.send_form.eth_send.value + \" \" +document.send_form.eth_unit.value+ \" will be sent to Address \" +document.send_form.eth_to_address.value+ \" from local account \" +document.send_form.eth_from_address.value+ \", Proceed?\"); if ( ok_proceed == true ) { send_eth(document.send_form.eth_from_address.value, document.send_form.eth_to_address.value, document.send_form.eth_send.value, document.send_form.eth_unit.value); document.send_form.eth_to_address.value = \"\"; document.send_form.eth_send.value = \"\"; return false; } else {}' /></form></div></p>");
 
 </script>
 

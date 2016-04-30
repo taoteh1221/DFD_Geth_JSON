@@ -317,12 +317,20 @@ function call_contract() {
 /////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////
 function send_eth(from_address, to_address, eth_amount, eth_unit) {
+                            
+document.getElementById('status').innerHTML = 'Transaction is being processed, please wait...';
     
 var inwei = web3.toWei(eth_amount, eth_unit);
     
     web3.eth.sendTransaction({from: web3.eth.accounts[from_address], to: to_address, value: inwei}, function(err, transaction_id) {
-    if (!err)
-    document.getElementById('status').innerHTML = 'Address ' + to_address + ' was sent ' + eth_amount + ' '+eth_unit+' from account '+from_address+', ' + "\n Transaction ID: " + transaction_id;
+                            
+                            if (!err) {
+                            document.getElementById('status').innerHTML = 'Address ' + to_address + ' was sent ' + eth_amount + ' '+eth_unit+' from local account '+from_address+', ' + "\n Transaction ID: " + transaction_id;
+                            }
+                            else {
+                            document.getElementById('status').innerHTML = err;
+                            }
+                            
     });
     
 
