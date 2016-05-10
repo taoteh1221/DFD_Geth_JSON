@@ -33,7 +33,7 @@ $json_server_array = array(
                      //"NAME YOUR NODE HERE" => "http://NODE.IP.ADDRESS.HERE:PORT_NUMBER_HERE",
                      "Gigabyte 1900 Node" => "http://192.168.1.140:8545",
                      "Raspi 3 Node" => "http://192.168.1.100:8545",
-                     "ASUS M5A97 R2.0 Node" => "http://192.168.1.112:8888"
+                     "ASUS M5A97 R2.0 Node" => "http://192.168.1.112:8545"
                     );
 
                     

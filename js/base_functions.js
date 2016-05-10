@@ -7,7 +7,7 @@ function eth_mining_profit() {
         
     var scale = ( difficulty / 1000000 );  //MHs
     
-    var time = ( scale.toFixed(2) / eth_hash_rate_convert['MHs'].toFixed(2) );
+    var time = ( scale.toFixed(2) / eth_hash_rate_convert['KHs'].toFixed(2) );
     
     var hours = ( time / 3600 );
     
@@ -89,7 +89,7 @@ function node_stats() {
                                           };
                                 
     if (!error)
-    document.getElementById('hashrate').innerHTML = ( eth_mining == true ) ? "Yes (localhost hashrate is " + eth_hash_rate_convert2['MHs'].toFixed(2) + " MHs)" : "No" + "</p>";
+    document.getElementById('hashrate').innerHTML = ( eth_mining == true ) ? "Yes (localhost hashrate is " + eth_hash_rate_convert2['KHs'].toFixed(2) + " MHs)" : "No" + "</p>";
                                               
                                               });
     
@@ -103,23 +103,20 @@ function node_stats() {
     
     window.node_html = '';
 
-    window.node_html = "<p><b>Client Version:</b> "+client_version+"</p>";
+    
+    window.node_html =  window.node_html + "<p><b>Client Version:</b> "+client_version+"</p>";
+    
+    window.node_html = window.node_html + "<p><b>Network:</b> "+network_name+"</p>";
     
     window.node_html = window.node_html + "<p><b>Number of Peers:</b> "+peer_count+"</p>";
-    
-    window.node_html = window.node_html + "<p><b>Current Block Number:</b> "+number_format(block_number)+"</p>";
     
     window.node_html = window.node_html + "<p><b>Gas Price:</b> "+(gas_price / 1000000000)+" gwei</p>";
     
     window.node_html = window.node_html + "<p><b>Gas Limit:</b> "+number_format(block_info['gasLimit'])+" gas</p>";
     
-    window.node_html = window.node_html + "<p><b>Addresses:</b> <ul>";
+    window.node_html = window.node_html + "<p><b>Current Block Number:</b> "+number_format(block_number)+"</p>";
     
-        for(var account in window.accounts) {
-    window.node_html = window.node_html + "<li><a href='http://etherscan.io/address/" + accounts[account] + "' target='_blank'>" + accounts[account] + "</a> (Local Account " + account + "): "+ web3.eth.getBalance(accounts[account]) / 1000000000000000000 +" ETH, "+web3.eth.getTransactionCount(accounts[account])+" sent transactions</li>";
-        }
-        
-    window.node_html = window.node_html + "</ul></p>";
+    window.node_html = window.node_html + "<p><b>Mining Difficulty:</b> "+number_format(difficulty)+"</p>";
     
     window.node_html = window.node_html + "<p><b>Available Compilers:</b> <ul>";
         
@@ -129,11 +126,17 @@ function node_stats() {
         
     window.node_html = window.node_html + "</ul></p>";
     
-    window.node_html = window.node_html + "<p><b>ETH Coinbase:</b> <a href='http://etherscan.io/address/" + coin_base + "' target='_blank'>"+coin_base+"</a></p>";
+    window.node_html = window.node_html + "<p><b>ETH Coinbase:</b> <a href='http://"+blockexplorer_host+"/address/" + coin_base + "' target='_blank'>"+coin_base+"</a></p>";
     
-    window.node_html = window.node_html + "<p><b>Mining Difficulty:</b> "+number_format(difficulty)+"</p>";
+    window.node_html = window.node_html + "<p><b>Addresses:</b> <ul>";
     
-    var is_mining = ( eth_mining == true ) ? "Yes (localhost hashrate is " + eth_hash_rate_convert['MHs'].toFixed(2) + " MHs)" : "No" + "</p>";
+        for(var account in window.accounts) {
+    window.node_html = window.node_html + "<li><a href='http://"+blockexplorer_host+"/address/" + accounts[account] + "' target='_blank'>" + accounts[account] + "</a> (Local Account " + account + "): "+ web3.eth.getBalance(accounts[account]) / 1000000000000000000 +" ETH, "+web3.eth.getTransactionCount(accounts[account])+" sent transactions</li>";
+        }
+        
+    window.node_html = window.node_html + "</ul></p>";
+    
+    var is_mining = ( eth_mining == true ) ? "Yes (localhost hashrate is " + eth_hash_rate_convert['KHs'].toFixed(2) + " KHs)" : "No" + "</p>";
     
     window.node_html = window.node_html + "<p><b>Mining</b>: " + is_mining;
     

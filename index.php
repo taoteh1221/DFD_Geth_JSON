@@ -143,7 +143,7 @@ node_stats();
     
     
         for(var account in window.accounts) {
-    window.node_html = window.node_html + "<li><a href='http://etherscan.io/address/" + accounts[account] + "' target='_blank'>" + accounts[account] + "</a> (account " + account + "): "+ web3.eth.getBalance(accounts[account]) / 1000000000000000000 +" ETH, "+web3.eth.getTransactionCount(accounts[account])+" sent transactions</li>";
+    window.node_html = window.node_html + "<li><a href='http://"+blockexplorer_host+"/address/" + accounts[account] + "' target='_blank'>" + accounts[account] + "</a> (account " + account + "): "+ web3.eth.getBalance(accounts[account]) / 1000000000000000000 +" ETH, "+web3.eth.getTransactionCount(accounts[account])+" sent transactions</li>";
     
         document.write("<option value='" + account + "'> Local Account " + account + " </option>");
     
